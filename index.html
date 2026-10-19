@@ -36,6 +36,7 @@
     </main>
   </div>
   <div class="toast" id="toast" role="status"></div>
+  <!-- Lead Details Modal -->
   <div class="modal-backdrop" id="modal-backdrop" hidden>
     <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
       <div class="modal-head"><div><small class="eyebrow">LEAD DETAILS</small><h2 id="modal-title">Lead details</h2></div><button class="icon-btn" id="close-modal" aria-label="Close">×</button></div>
@@ -43,6 +44,76 @@
       <div class="modal-foot"><button class="btn secondary" id="prev-lead">← Previous</button><button class="btn secondary" id="next-lead">Next →</button></div>
     </section>
   </div>
+
+  <!-- Active Call & AI Practice Modal -->
+  <div class="modal-backdrop" id="call-modal-backdrop" hidden>
+    <section class="modal call-modal-card" role="dialog" aria-modal="true" aria-labelledby="call-modal-title">
+      <div class="modal-head">
+        <div>
+          <span class="call-badge-live" id="call-live-badge"><i class="pulse-dot"></i> <span id="call-status-text">Calling...</span></span>
+          <h2 id="call-modal-title" style="margin-top:6px;">Priya Nair</h2>
+        </div>
+        <button class="icon-btn" id="close-call-modal" aria-label="End and close">×</button>
+      </div>
+      
+      <!-- Call Mode Switcher -->
+      <div class="call-mode-tabs">
+        <button class="call-tab active" id="tab-direct-call">☎ Live Customer Call</button>
+        <button class="call-tab" id="tab-ai-coach">✳ AI Roleplay & Pitch Coach</button>
+      </div>
+
+      <div id="call-modal-body">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+    </section>
+  </div>
+
+  <!-- Recent Call Review Modal -->
+  <div class="modal-backdrop" id="review-modal-backdrop" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="review-modal-title">
+      <div class="modal-head">
+        <div><small class="eyebrow">CALL REVIEW & AUDIO</small><h2 id="review-modal-title">Call Review</h2></div>
+        <button class="icon-btn" id="close-review-modal" aria-label="Close">×</button>
+      </div>
+      <div id="review-modal-content"></div>
+    </section>
+  </div>
+
+  <!-- Agent Playbook Modal (Need a Help) -->
+  <div class="modal-backdrop" id="playbook-modal-backdrop" hidden>
+    <section class="modal playbook-modal" role="dialog" aria-modal="true" aria-labelledby="playbook-title">
+      <div class="modal-head">
+        <div><small class="eyebrow">AGENT PLAYBOOK</small><h2 id="playbook-title">On-Ground Daily SOP & Guides</h2></div>
+        <button class="icon-btn" id="close-playbook-modal" aria-label="Close">×</button>
+      </div>
+      <div id="playbook-content">
+        <div class="playbook-section">
+          <h3>⚡ 15-Minute Callback Rule</h3>
+          <p>86% of offline sales are lost with zero follow-up. Always call back high-intent missed calls within 15 minutes of store walk-out.</p>
+        </div>
+        <div class="playbook-section">
+          <h3>🎯 3-Step Walk-out Recovery Script</h3>
+          <ol>
+            <li><strong>Acknowledge & Name:</strong> Mention the customer's name and the exact product viewed (+23.6pp conversion lift).</li>
+            <li><strong>Unblock the Objection:</strong> Check warranty, home dimensions, or offer zero-cost EMI.</li>
+            <li><strong>Clear Next Step:</strong> Lock in an appointment or send quotation via WhatsApp immediately.</li>
+          </ol>
+        </div>
+        <div class="playbook-section">
+          <h3>💬 Common Customer Objections & Responses</h3>
+          <div class="objection-card">
+            <strong>"Need to discuss with spouse/manager"</strong>
+            <p>Offer a virtual showroom tour or instant PDF summary to their WhatsApp.</p>
+          </div>
+          <div class="objection-card">
+            <strong>"Price seems high"</strong>
+            <p>Highlight the 10-year warranty, durability score, and ₹0 down payment financing option.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
   <script src="app.js"></script>
 </body>
 </html>
