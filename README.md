@@ -67,9 +67,8 @@ In compliance with the assignment rules, this implementation was refined using *
 ---
 
 ## 📁 Repository Structure
-```
 ├── index.html        # Semantic HTML5 app shell & dialog markup
 ├── styles.css        # Responsive styling & design tokens
 ├── app.js            # Core application logic, calling engine & router
 └── README.md         # Documentation & walkthrough
-```
+
