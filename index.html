@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OnGround | Call Centre</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand"><span class="brand-mark">o</span><span>on-ground<span class="brand-dot">.</span></span></div>
+      <div class="workspace-label">WORKSPACE</div>
+      <nav id="main-nav" aria-label="Main navigation">
+        <button class="nav-item active" data-view="dashboard"><span>▦</span> Dashboard</button>
+        <button class="nav-item" data-view="calls"><span>↗</span> Calls to make <b class="nav-count">8</b></button>
+        <button class="nav-item" data-view="incoming"><span>↙</span> Incoming <b class="nav-count alert">3</b></button>
+        <button class="nav-item" data-view="recent"><span>◷</span> Recent</button>
+        <button class="nav-item" data-view="calendar"><span>▦</span> Calendar</button>
+        <div class="workspace-label pulse-label">TEAM</div>
+        <button class="nav-item" data-view="pulse"><span>✳</span> Pulse</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="help-card"><div class="help-icon">?</div><strong>Need a hand?</strong><p>Check your daily playbook.</p><button id="help-btn">Open playbook ↗</button></div>
+        <div class="profile"><div class="avatar purple">AS</div><div><strong>Agent Sharma</strong><small>Call centre agent</small></div><span class="profile-more">•••</span></div>
+      </div>
+    </aside>
+    <main class="main-area">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobile-menu" aria-label="Open navigation">☰</button>
+        <div class="breadcrumbs"><span>Workspace</span><span class="crumb-sep">/</span><strong id="crumb-title">Dashboard</strong></div>
+        <div class="top-actions"><span class="live-pill"><i></i> Shift active</span><button class="icon-btn" id="search-btn" title="Search">⌕</button><button class="icon-btn" id="notifications-btn" title="Notifications">♧</button><div class="avatar purple">AS</div></div>
+      </header>
+      <section class="page-content" id="page-content" aria-live="polite"></section>
+      <footer>On-Ground <span>·</span> Call Centre Workspace <span class="footer-right">Demo data · Built for assignment</span></footer>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+  <div class="modal-backdrop" id="modal-backdrop" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-head"><div><small class="eyebrow">LEAD DETAILS</small><h2 id="modal-title">Lead details</h2></div><button class="icon-btn" id="close-modal" aria-label="Close">×</button></div>
+      <div id="modal-content"></div>
+      <div class="modal-foot"><button class="btn secondary" id="prev-lead">← Previous</button><button class="btn secondary" id="next-lead">Next →</button></div>
+    </section>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
