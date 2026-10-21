@@ -620,7 +620,7 @@ function closeModal() {
 }
 
 // ----------------------------------------------------
-// THE WORKING CALLING ENGINE & AI PITCH COACH
+// ACTUAL PHONE CALLING ENGINE (WINDOWS PHONE LINK / CELLULAR)
 // ----------------------------------------------------
 function openCallModal(phone, name, mode = "direct") {
   const l = leads.find(x => x.name === name) || { name, phone, value: "₹50,000", product: "Customer follow-up", initials: name.split(" ").map(s => s[0]).join(""), color: "purple" };
@@ -638,41 +638,41 @@ function openCallModal(phone, name, mode = "direct") {
   $("#call-modal-backdrop").hidden = false;
   $("#call-modal-title").textContent = l.name;
   updateCallModalUI();
-
-  // Switch to Ringing state, then auto-connect after 1.5 seconds
-  const statusBadge = $("#call-live-badge");
-  const statusText = $("#call-status-text");
-  statusBadge.className = "call-badge-live ringing";
-  statusText.textContent = "Ringing...";
-  playTone(440, 480); // Standard North American / European ring cadence tone
-
-  clearInterval(callTimerInterval);
-  setTimeout(() => {
-    if (!activeCall) return;
-    statusBadge.className = "call-badge-live";
-    statusText.textContent = "Connected (Live)";
-    toast("Call connected with " + l.name);
-
-    if (callMode === "coach") {
-      speakText("Hello Agent Sharma, this is " + l.name + ". I was looking at the " + l.product + ". Can you give me the best price?");
-    }
-
-    callTimerInterval = setInterval(() => {
-      callSeconds++;
-      const timerEl = $("#live-call-timer");
-      if (timerEl) {
-        const mins = String(Math.floor(callSeconds / 60)).padStart(2, "0");
-        const secs = String(callSeconds % 60).padStart(2, "0");
-        timerEl.textContent = `${mins}:${secs}`;
-      }
-    }, 1000);
-  }, 1600);
 }
 
 function formatDuration(sec) {
   const m = String(Math.floor(sec / 60)).padStart(2, "0");
   const s = String(sec % 60).padStart(2, "0");
   return `${m}:${s}`;
+}
+
+function startRealCall(targetPhone) {
+  const cleanPhone = (targetPhone || activeCall.phone || "").replace(/\s+/g, "");
+  if (!cleanPhone) {
+    toast("Please enter a valid phone number.");
+    return;
+  }
+
+  activeCall.phone = cleanPhone;
+  const statusBadge = $("#call-live-badge");
+  const statusText = $("#call-status-text");
+  statusBadge.className = "call-badge-live";
+  statusText.textContent = "Dialing on Phone Link...";
+  toast("Launching Windows Phone Link for real call to " + cleanPhone);
+
+  // Directly trigger OS / Windows Phone Link cellular call
+  window.location.href = "tel:" + cleanPhone;
+
+  // Start duration counter
+  clearInterval(callTimerInterval);
+  callSeconds = 0;
+  callTimerInterval = setInterval(() => {
+    callSeconds++;
+    const timerEl = $("#live-call-timer");
+    if (timerEl) {
+      timerEl.textContent = formatDuration(callSeconds);
+    }
+  }, 1000);
 }
 
 function updateCallModalUI() {
@@ -683,31 +683,43 @@ function updateCallModalUI() {
   const body = $("#call-modal-body");
   if (callMode === "direct") {
     body.innerHTML = `
-      <div class="call-hero">
+      <div class="call-hero" style="padding-top:6px;">
         <div class="call-avatar-center ${l.color || "purple"}">${l.initials || "C"}</div>
         <div class="call-timer-display" id="live-call-timer">00:00</div>
-        <div class="call-customer-sub">${l.phone} · Interested in ${l.product} (${l.value})</div>
+        <div class="call-customer-sub">Customer: <strong>${l.name}</strong> · Interested in ${l.product} (${l.value})</div>
       </div>
 
-      <div class="call-controls-row">
-        <button class="round-call-btn ${isMuted ? "active" : ""}" id="btn-call-mute" title="${isMuted ? "Unmute" : "Mute"}">
-          ${isMuted ? "🔇" : "🎤"}
-        </button>
+      <div style="background:#f9f9fc;border:1px solid var(--line);border-radius:10px;padding:12px;margin:12px 0;">
+        <label style="display:block;font-size:11px;font-weight:700;color:#595d6d;margin-bottom:6px;">Recipient Phone Number (Editable for Live Demo):</label>
+        <div style="display:flex;gap:8px;">
+          <input type="tel" id="real-phone-input" class="search-input" style="flex:1;font-weight:700;font-size:14px;letter-spacing:0.5px;" value="${activeCall.phone}">
+          <button class="btn secondary" id="btn-quick-own-number" style="padding:6px 10px;font-size:10px;" title="Set your own phone number to test">My Phone</button>
+        </div>
+        <div style="font-size:10px;color:#858998;margin-top:6px;">
+          ℹ Clicking "Dial via Windows Phone Link" will command your paired phone to place a real outgoing cellular call.
+        </div>
+      </div>
+
+      <button class="btn primary" id="btn-trigger-real-call" style="width:100%;padding:13px;font-size:12px;background:#208c67;border-color:#208c67;box-shadow:0 4px 12px #208c6735;">
+        📞 Dial via Windows Phone Link (Real Call)
+      </button>
+
+      <div class="call-controls-row" style="margin:16px 0 10px;">
         <button class="round-call-btn" id="btn-call-dialpad" title="Keypad">⌨</button>
         <button class="round-call-btn btn-hangup" id="btn-call-hangup" title="End call">✆</button>
       </div>
 
-      <div id="dialpad-container" style="display:none;">
+      <div id="dialpad-container" style="display:none;margin-bottom:10px;">
         <div class="dialpad-grid">
           ${["1", "2", "3", "4", "5", "6", "7", "8", "9", "*", "0", "#"].map(k => `<button class="dial-key" data-key="${k}">${k}</button>`).join("")}
         </div>
       </div>
 
-      <textarea class="in-call-notes" id="active-call-notes" placeholder="In-call notes: write customer requests, objections, or delivery timelines..."></textarea>
+      <textarea class="in-call-notes" id="active-call-notes" placeholder="In-call notes: write customer responses, quote given, or next callback date..."></textarea>
       
       <div style="margin-top:12px;font-size:10px;color:#858998;display:flex;justify-content:space-between;align-items:center;">
-        <span>Connected via WebRTC in-browser voice engine</span>
-        <a href="tel:${l.phone}" style="color:var(--purple);text-decoration:none;">Switch to device phone app ↗</a>
+        <span>Real cellular carrier call via Windows Phone Link</span>
+        <a href="tel:${activeCall.phone}" id="direct-tel-fallback" style="color:var(--purple);font-weight:600;text-decoration:none;">Re-trigger dialer ↗</a>
       </div>`;
   } else {
     // AI Roleplay & Pitch Coach
@@ -718,9 +730,9 @@ function updateCallModalUI() {
           <span class="ai-speaker-tag">AI Voice Active</span>
         </div>
         <div class="coach-transcript" id="ai-transcript">
-          <div style="font-size:11px;color:#7e8293;font-style:italic;">[Call connected] AvaniBot is simulating ${l.name} based on real store signals.</div>
+          <div style="font-size:11px;color:#7e8293;font-style:italic;">[Roleplay active] AvaniBot simulates shopper objections based on real retail data.</div>
           <div style="margin-top:6px;background:#fff;border-radius:8px;padding:8px 10px;border:1px solid #ebe6ff;">
-            <strong>${l.name} (AI):</strong> "Hello Agent Sharma! I saw the ${l.product} yesterday at your store. Does it come with a warranty and home delivery?"
+            <strong>${l.name} (AI Customer):</strong> "Hello Agent Sharma! I saw the ${l.product} yesterday at your store. Does it come with a warranty and home delivery?"
           </div>
         </div>
 
@@ -742,13 +754,24 @@ function updateCallModalUI() {
   }
 
   // Bind controls
-  const muteBtn = $("#btn-call-mute");
-  if (muteBtn) {
-    muteBtn.onclick = () => {
-      isMuted = !isMuted;
-      muteBtn.classList.toggle("active", isMuted);
-      muteBtn.innerHTML = isMuted ? "🔇" : "🎤";
-      toast(isMuted ? "Microphone muted" : "Microphone unmuted");
+  const realCallBtn = $("#btn-trigger-real-call");
+  if (realCallBtn) {
+    realCallBtn.onclick = () => {
+      const p = $("#real-phone-input") ? $("#real-phone-input").value : activeCall.phone;
+      startRealCall(p);
+    };
+  }
+
+  const ownNumberBtn = $("#btn-quick-own-number");
+  if (ownNumberBtn) {
+    ownNumberBtn.onclick = () => {
+      const num = prompt("Enter your real mobile number to call (with +91):", "+91");
+      if (num) {
+        $("#real-phone-input").value = num;
+        activeCall.phone = num;
+        if ($("#direct-tel-fallback")) $("#direct-tel-fallback").href = "tel:" + num;
+        toast("Updated number to " + num);
+      }
     };
   }
 
@@ -769,7 +792,9 @@ function updateCallModalUI() {
   dialKeys.forEach(k => {
     k.onclick = () => {
       playTone(770, 1336);
-      toast("Dialed DTMF: " + k.dataset.key);
+      const input = $("#real-phone-input");
+      if (input) input.value += k.dataset.key;
+      toast("Key: " + k.dataset.key);
     };
   });
 

@@ -19,19 +19,17 @@ A responsive front-end dashboard built for retail call centre agents, matching t
 
 ---
 
-## Calling Feature & AI Coach
-Since the assignment specifies sample data and no backend, I implemented a realistic in-browser calling experience using native browser APIs:
+## Actual Phone Calling & AI Coach
 
-1. **In-Browser Calling & Callback**:
-   - Clicking **"☎ Call"** or **"☎ Call back"** opens the calling console.
-   - Includes ringing state with audio cadence, followed by an active connected timer (`MM:SS`).
-   - Interactive controls: Microphone Mute/Unmute, interactive DTMF dialpad with audio feedback, in-call note taking, and an End Call button.
-   - Hanging up logs the call duration, timestamp, and notes to the **Recent Calls** list and increments the daily completed call target.
-   - An optional fallback link allows opening the device's default phone app via `tel:` if preferred.
+1. **Actual Phone Calling (Windows Phone Link / Cellular)**:
+   - Clicking **"📞 Dial via Windows Phone Link"** or any call button initiates an actual cellular phone call to the recipient's phone number through the operating system's registered telephony handler (Windows Phone Link paired with an Android or iPhone).
+   - This commands the phone carrier to place an actual phone call to the recipient's phone, causing their physical device to ring.
+   - The phone number field is fully editable, allowing agents to input custom numbers for testing or live callbacks.
+   - Automatically tracks session duration, captures in-call notes, and logs completed calls to the **Recent Calls** history.
 
 2. **AI Pitch Coach Roleplay (AvaniBot)**:
-   - Inside the call console, switching to the **"✳ AI Roleplay & Pitch Coach"** tab initiates a simulated roleplay.
-   - The AI customer speaks questions aloud through the browser speech engine.
+   - Switching to the **"✳ AI Roleplay & Pitch Coach"** tab initiates a voice roleplay session.
+   - The AI customer speaks questions aloud through the browser speech engine (`SpeechSynthesis`).
    - Displays real-time hints and recommended responses based on retail sales walk-out recovery strategies.
 
 ---
